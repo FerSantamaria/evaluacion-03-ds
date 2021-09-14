@@ -4,16 +4,18 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import os
 
 def get_data():
   # Loading data from CSV
   passenger_df = pd.read_csv("data/titanic.csv")
   
-  # Removing non-digits from Ticket number using regex and making 'em strings and replacing NaN values with dashes
+  # Removing non-digits from Ticket number using regex and making 'em strings
   passenger_df['Ticket'].replace(r"\D", '', regex=True, inplace=True)
   pd.Series(['Ticket'], dtype="string")
 
+  #Replacing NaN values with zeros and dashes
   passenger_df['Tarifa'].fillna(0, inplace=True)
   passenger_df.fillna('-', inplace=True)
 
@@ -39,9 +41,30 @@ def passenger_search(data):
   return True
 
 def pie_chart(data):
-  return True
+  dead = data[data["Sobrevivio"] == 0].count()["Sobrevivio"]
+  survivor = data[data["Sobrevivio"] == 1].count()["Sobrevivio"]
+
+  graph_data = [dead, survivor]
+  graph_labels = ["Muertes", "Sobrevivientes"]
+
+  plt.pie(graph_data, labels=graph_labels, autopct= lambda x: "{:.0f}\n{:.2f}%".format((dead + survivor)*x/100, x) )
+  plt.title("Muertes y Sobrevivientes")
+  plt.show()
 
 def bar_chart(data):
+  dead = data[data["Sobrevivio"] == 1]
+  
+  class_1 = dead[dead["Clase"] == 1].count()["Clase"]
+  class_2 = dead[dead["Clase"] == 2].count()["Clase"]
+  class_3 = dead[dead["Clase"] == 3].count()["Clase"]
+  
+  graph_data = [class_1, class_2, class_3]
+  graph_labels = ["1a. Clase", "2a. Clase", "3a. Clase"]
+
+  plt.bar(graph_labels, height=graph_data)
+  plt.title("Muertes por clase")
+  plt.ylabel('Muertes')
+  plt.show()
   return True
 
 def ticket_prices(data):

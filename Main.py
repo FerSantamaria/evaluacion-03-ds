@@ -70,7 +70,7 @@ def bar_chart(data):
 def ticket_prices(data):
   print("===== Costo de Tickets (Mayor y menor) =====\n")
 
-  min_value = data["Tarifa"].min()
+  min_value = data[data["Tarifa"] > 0]["Tarifa"].min()
   max_value = data["Tarifa"].max()
 
   print(f"\nEl costo de ticket más bajo es: ${min_value:.2f}")
